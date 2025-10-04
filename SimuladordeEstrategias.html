@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GeoPlan Ciudad Viva - Simulador de Estrategias</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-row">
+<aside class="flex flex-col h-full bg-[#111e22] min-w-64 p-4">
+<div class="flex flex-col gap-4">
+<div class="flex gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Logotipo de Ciudad Viva" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA-dOafXnNTBtMJtJ_o9rva8g1O-aV2EFlpwS61aKG3LS0m06vQz1EJ6I9LwnXQmIUjslUCg6XButkmCpYIM1M-G6C-hbSQTB_ik65pr80AGliuemgA9lYw3cqoDbPC8pteYs6ZbMCfokPumvbeqUtUM4hlTjn460ZU_onryhPDIUGk3wpbr4-_gKUrLC-5UkEiFl5lU33cJ_DRzLabdNwWHWtt3gxo1e9m5uTX3e5dwPh7nr27ARX_f29CRCtVtFQGievO4XRJdGE");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-medium leading-normal">Ciudad Viva</h1>
+<p class="text-[#92bbc9] text-sm font-normal leading-normal">Santa Cruz</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#233f48] text-white" href="#">
+<span class="material-symbols-outlined">map</span>
+<p class="text-sm font-medium leading-normal">Simulador de Estrategias</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white" href="#">
+<span class="material-symbols-outlined">groups</span>
+<p class="text-sm font-medium leading-normal">Participación Ciudadana</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+<p class="text-sm font-medium leading-normal">Mis Recompensas</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-4 mt-auto">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Cerrar sesión</span>
+</button>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Configuración</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white" href="#">
+<span class="material-symbols-outlined">help</span>
+<p class="text-sm font-medium leading-normal">Ayuda</p>
+</a>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col p-6">
+<header>
+<h1 class="text-white tracking-light text-[32px] font-bold leading-tight px-4 text-left pb-1 pt-2">Simulador de Estrategias Urbanas: Construye el Futuro de Santa Cruz</h1>
+<p class="text-white text-base font-normal leading-normal pb-3 pt-1 px-4">1. Elige una estrategia. 2. Observa el impacto en el mapa y las métricas. 3. Compara tus ideas.</p>
+</header>
+<div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+<div class="lg:col-span-1 bg-[#111e22] rounded-xl p-6 flex flex-col">
+<h2 class="text-white text-xl font-semibold mb-4">Panel de Control</h2>
+<div class="flex flex-col gap-3">
+<label class="flex items-center gap-4 rounded-lg border border-solid border-[#325a67] p-[15px]">
+<input checked="" class="h-5 w-5 border-2 border-[#325a67] bg-transparent text-transparent rounded-full checked:border-primary checked:bg-[url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(17,163,212)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3ccircle cx=%278%27 cy=%278%27 r=%273%27/%3e%3c/svg%3e')] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-primary" name="estrategia" type="radio"/>
+<div class="flex grow flex-col"><p class="text-white text-sm font-medium leading-normal">Plan de Reforestación</p></div>
+</label>
+<label class="flex items-center gap-4 rounded-lg border border-solid border-[#325a67] p-[15px]">
+<input class="h-5 w-5 border-2 border-[#325a67] bg-transparent text-transparent rounded-full checked:border-primary checked:bg-[url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(17,163,212)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3ccircle cx=%278%27 cy=%278%27 r=%273%27/%3e%3c/svg%3e')] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-primary" name="estrategia" type="radio"/>
+<div class="flex grow flex-col"><p class="text-white text-sm font-medium leading-normal">Expansión del Transporte Sostenible</p></div>
+</label>
+<label class="flex items-center gap-4 rounded-lg border border-solid border-[#325a67] p-[15px]">
+<input class="h-5 w-5 border-2 border-[#325a67] bg-transparent text-transparent rounded-full checked:border-primary checked:bg-[url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(17,163,212)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3ccircle cx=%278%27 cy=%278%27 r=%273%27/%3e%3c/svg%3e')] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-primary" name="estrategia" type="radio"/>
+<div class="flex grow flex-col"><p class="text-white text-sm font-medium leading-normal">Implementación de Energía Limpia</p></div>
+</label>
+<label class="flex items-center gap-4 rounded-lg border border-solid border-[#325a67] p-[15px]">
+<input class="h-5 w-5 border-2 border-[#325a67] bg-transparent text-transparent rounded-full checked:border-primary checked:bg-[url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(17,163,212)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3ccircle cx=%278%27 cy=%278%27 r=%273%27/%3e%3c/svg%3e')] focus:outline-none focus:ring-0 focus:ring-offset-0 checked:focus:border-primary" name="estrategia" type="radio"/>
+<div class="flex grow flex-col"><p class="text-white text-sm font-medium leading-normal">Gestión de Residuos</p></div>
+</label>
+</div>
+<div class="@container mt-6">
+<div class="relative flex w-full flex-col items-start justify-between gap-3 p-4 bg-[#233f48] rounded-lg @[480px]:flex-row @[480px]:items-center">
+<div class="flex w-full shrink-[3] items-center justify-between">
+<p class="text-white text-base font-medium leading-normal">Intensidad de la reforestación</p>
+<p class="text-white text-sm font-normal leading-normal @[480px]:hidden">50%</p>
+</div>
+<div class="flex h-4 w-full items-center gap-4">
+<div class="flex h-1 flex-1 rounded-sm bg-[#325a67]">
+<div class="h-full w-[50%] rounded-sm bg-primary"></div>
+<div class="relative">
+<div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary"></div>
+</div>
+</div>
+<p class="text-white text-sm font-normal leading-normal hidden @[480px]:block">50%</p>
+</div>
+</div>
+</div>
+<div class="mt-6 bg-[#233f48] p-4 rounded-lg">
+<h3 class="text-white font-semibold mb-3">Métricas de Impacto</h3>
+<div class="space-y-3 text-white">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">co2</span>
+<span>Reducción de CO2</span>
+</div>
+<span class="font-bold">1,200 t</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">forest</span>
+<span>Aumento Áreas Verdes</span>
+</div>
+<span class="font-bold">15%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">air</span>
+<span>Mejora Calidad del Aire</span>
+</div>
+<span class="font-bold">25%</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-6 flex gap-4">
+<button class="flex-1 flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Simular</span>
+</button>
+<button class="flex-1 flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary/30 text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Comparar</span>
+</button>
+</div>
+</div>
+<div class="lg:col-span-2 bg-[#111e22] rounded-xl relative overflow-hidden">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Mapa satelital de Santa Cruz, Bolivia con superposiciones de datos verdes y azules que indican mejoras ambientales." data-location="Santa Cruz, Bolivia" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA54J9trH0fMykRWTkXJyMLZLklkjHb897mXbNjoEpVYJ6Pb306cletE9EMpTseR4jexR4u_aPZIrNAUTMFcmBYVKdRIPHhp9MAe1jV5zVcek54BKUADeo-U6kjvg7-VLgxMcEhGi_N4PaOFPZc5pVIfur4L84Izud90vORpvp6KUvYGKZmyGIjTgjQem99AH_oMj49KwwbLf6ZarmrY4kMDA9HKFgrb72SEdycxhHJ0nUK3xbcX0LdpkgCw2X2pGTzgStRONWGNfw');"></div>
+<div class="absolute bottom-4 right-4 flex flex-col gap-2">
+<button class="bg-[#233f48] text-white p-2 rounded-lg"><span class="material-symbols-outlined">add</span></button>
+<button class="bg-[#233f48] text-white p-2 rounded-lg"><span class="material-symbols-outlined">remove</span></button>
+<button class="bg-[#233f48] text-white p-2 rounded-lg mt-2"><span class="material-symbols-outlined">my_location</span></button>
+</div>
+<div class="absolute bottom-4 left-4 bg-[#233f48]/80 backdrop-blur-sm p-3 rounded-lg text-white">
+<h4 class="font-bold text-sm mb-2">Leyenda</h4>
+<div class="flex items-center gap-2 text-xs">
+<div class="w-4 h-4 bg-green-500 rounded"></div>
+<span>Alta Reforestación</span>
+</div>
+<div class="flex items-center gap-2 text-xs mt-1">
+<div class="w-4 h-4 bg-green-300 rounded"></div>
+<span>Media Reforestación</span>
+</div>
+<div class="flex items-center gap-2 text-xs mt-1">
+<div class="w-4 h-4 bg-yellow-300 rounded"></div>
+<span>Baja Reforestación</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

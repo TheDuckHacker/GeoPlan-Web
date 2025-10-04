@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Acerca de GeoPlan Ciudad Viva</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2ECC71",
+                        "secondary": "#3498DB",
+                        "background-light": "#F4F6F6",
+                        "background-dark": "#101d22",
+                        "text-light": "#34495E",
+                        "text-dark": "#F4F6F6",
+                        "card-dark": "#1c2427",
+                        "border-dark": "#3b4d54",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+<!-- Hero Section -->
+<div class="@container">
+<div class="@[480px]:p-4">
+<div class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-lg items-center justify-center p-4" data-alt="Vista satelital estilizada de Santa Cruz, Bolivia" style='background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCf7KlO-5oVrGn0yCJk6BG9omZLcKzCv-cEjWNslySqwhB80cVTsXMtOz2aFGCv3m4w3kzenM2UgPSLNtX5F9pRMG_JE4uo7_vKNECQ7PjDT_N4eiduP6b3jJAjTutk91-9bgz9BbgvFWtPOr-xx-rOl9-9ubT4SEovrqYTd5MGrlMTJ-o1nV5H9jL0C_AzPpSWeQnXST-KvQ-Dva0IJDLry62J5ut1pHWsajuz8oksm-pEYh1_1WonzdBObu1gAP1hrT920c5qBao");'>
+<div class="flex flex-col gap-2 text-center">
+<h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
+                                        GeoPlan Ciudad Viva: Construyendo un Futuro Sostenible para Santa Cruz.
+                                    </h1>
+</div>
+</div>
+</div>
+</div>
+<!-- TextGrid Section -->
+<div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 p-4">
+<div class="flex flex-1 gap-4 rounded-xl border border-transparent dark:border-border-dark bg-white dark:bg-card-dark p-6 flex-col items-center text-center transition-transform hover:scale-105">
+<span class="material-symbols-outlined text-secondary text-5xl">public</span>
+<div class="flex flex-col gap-2">
+<h2 class="text-text-light dark:text-text-dark text-xl font-bold leading-tight">Cuidar, Conectar y Anticipar</h2>
+<p class="text-text-light/80 dark:text-text-dark/80 text-base font-normal leading-normal">
+                                    Protegemos el medio ambiente urbano, fomentamos la comunidad y planificamos un futuro resiliente para Santa Cruz.
+                                </p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-transparent dark:border-border-dark bg-white dark:bg-card-dark p-6 flex-col items-center text-center transition-transform hover:scale-105">
+<span class="material-symbols-outlined text-secondary text-5xl">satellite_alt</span>
+<div class="flex flex-col gap-2">
+<h2 class="text-text-light dark:text-text-dark text-xl font-bold leading-tight">Impulsado por NASA EarthData</h2>
+<p class="text-text-light/80 dark:text-text-dark/80 text-base font-normal leading-normal">
+                                    Utilizamos datos de observación de la Tierra de la NASA para analizar la calidad del aire, las áreas verdes y la expansión urbana.
+                                </p>
+</div>
+</div>
+<div class="flex flex-1 gap-4 rounded-xl border border-transparent dark:border-border-dark bg-white dark:bg-card-dark p-6 flex-col items-center text-center transition-transform hover:scale-105">
+<span class="material-symbols-outlined text-secondary text-5xl">shield</span>
+<div class="flex flex-col gap-2">
+<h2 class="text-text-light dark:text-text-dark text-xl font-bold leading-tight">Ética, Educación y Comunidad</h2>
+<p class="text-text-light/80 dark:text-text-dark/80 text-base font-normal leading-normal">
+                                    Nuestro enfoque sin fines de lucro prioriza la privacidad, la educación y la participación ciudadana activa.
+                                </p>
+</div>
+</div>
+</div>
+<!-- CTA Button -->
+<div class="flex px-4 py-10 justify-center">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">¡Comienza a Explorar!</span>
+</button>
+</div>
+<!-- Footer -->
+<footer class="flex flex-col gap-6 px-5 py-10 text-center @container border-t border-text-light/10 dark:border-border-dark">
+<div class="flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around">
+<a class="text-text-light/80 dark:text-text-dark/80 text-base font-normal leading-normal min-w-40 hover:text-primary" href="#">Términos de Servicio</a>
+<a class="text-text-light/80 dark:text-text-dark/80 text-base font-normal leading-normal min-w-40 hover:text-primary" href="#">Política de Privacidad</a>
+<a class="text-text-light/80 dark:text-text-dark/80 text-base font-normal leading-normal min-w-40 hover:text-primary" href="#">Contacto</a>
+</div>
+<div class="flex flex-wrap justify-center gap-4">
+<a href="#">
+<svg class="text-text-light/80 dark:text-text-dark/80 hover:text-primary" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+</a>
+<a href="#">
+<svg class="text-text-light/80 dark:text-text-dark/80 hover:text-primary" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 4s-.7 2.1-2 3.4c1.6 1.4 2.8 3.2 3 5.2-1.7 1.1-3.5 2-5.4 2.3C18.2 21.4 16 23 12 23c-4.2 0-6.8-2.4-7-5.5-2.3-.6-4-1.8-5-3.5 1.3 1.1 2.8 2.1 4.5 2.8 1.4-1.3 2.5-2.8 3.1-4.5.8-2.3 1.3-4 2.4-5.3C12.3 4.2 14.8 2 18 2c.9 0 1.8.2 2.6.4-.3-1.2-1.2-2.1-2.4-2.4-1.4-.4-2.8 0-4 .8-1.7 1.1-2.8 2.8-3.1 4.8-.2 1.1-.1 2.2.3 3.2-1.5-.2-2.9-.8-4.2-1.8-1.3-1-2.2-2.3-2.8-3.8-.1-.4-.2-.8-.2-1.2 0-.2.1-.4.2-.6.2-.2.4-.4.6-.5.2-.1.4-.2.7-.2.3 0 .6.1.8.2.2.1.4.3.5.5s.3.4.3.7c0 .3-.1.5-.2.8-.2.2-.4.4-.7.5-.3.1-.6.2-.9.1-.3-.1-.6-.2-.8-.4-.2-.2-.4-.4-.5-.7-.1-.3-.1-.6 0-.9.1-.3.3-.6.5-.8.2-.2.5-.4.8-.5.3-.1.6-.2 1-.2s.6.1.9.2c.3.1.5.3.7.5.2.2.4.5.5.8.1.3.1.6 0 .9-.1.3-.3.6-.5.8-.2.2-.5.4-.8.5-1.1.4-2.1.8-3.1 1.3-.6.3-1.1.7-1.6 1.1-.5.4-1 .9-1.4 1.4-.4.5-.8 1.1-1.1 1.7-.3.6-.5 1.2-.6 1.9-.1.7 0 1.4.2 2.1.2.7.5 1.3.9 1.9.4.6.9 1.2 1.4 1.7.5.5 1.1.9 1.7 1.3.6.4 1.2.7 1.9.9.7.2 1.4.3 2.1.2.7-.1 1.3-.3 1.9-.6.6-.3 1.2-.7 1.7-1.1.5-.4.9-.9 1.3-1.4.4-.5.7-1.1.9-1.7.2-.6.3-1.2.2-1.9-.1-.7-.3-1.4-.6-2.1-.3-.7-.7-1.3-1.1-1.9-.4-.6-.9-1.2-1.4-1.7-.5-.5-1.1-.9-1.7-1.3-.6-.4-1.2-.7-1.9-.9-.7-.2-1.4-.3-2.1-.2-.7.1-1.3.3-1.9.6-.6.3-1.2.7-1.7 1.1z"></path></svg>
+</a>
+<a href="#">
+<svg class="text-text-light/80 dark:text-text-dark/80 hover:text-primary" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+</a>
+</div>
+<p class="text-text-light/60 dark:text-text-dark/60 text-base font-normal leading-normal">© 2023 GeoPlan Ciudad Viva. Todos los derechos reservados.</p>
+</footer>
+</div>
+</div>
+</div>
+</div>
+</body></html>
