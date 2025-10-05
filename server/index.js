@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const HOST = process.env.HOST || '0.0.0.0';
 
 // Middleware de seguridad
 app.use(helmet());
@@ -14,12 +15,16 @@ app.use(cors({
   credentials: true
 }));
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100 // límite de 100 requests por IP
-});
-app.use(limiter);
+// Rate limiting: habilitar solo en producción para evitar validaciones sobre proxy en desarrollo
+if (process.env.NODE_ENV === 'production') {
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100 // límite de 100 requests por IP
+  });
+  app.use(limiter);
+} else {
+  console.log('Rate limiter deshabilitado en entorno de desarrollo');
+}
 
 // Middleware para parsing
 app.use(express.json({ limit: '10mb' }));
@@ -58,7 +63,7 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Ruta no encontrada' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor GeoPlan ejecutándose en puerto ${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Servidor GeoPlan ejecutándose en http://${HOST}:${PORT}`);
   console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
 });

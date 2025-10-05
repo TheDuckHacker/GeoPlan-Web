@@ -333,30 +333,31 @@ class SimulationService {
     return {
       co2Reduction: {
         current: this.santaCruzData.currentCO2,
-        reduction: this.santaCruzData.currentCO2 * impact.co2Reduction.value,
-        newLevel: this.santaCruzData.currentCO2 * (1 - impact.co2Reduction.value),
-        percentage: Math.round(impact.co2Reduction.improvement)
+        // Defensive reads: ensure properties exist and fall back to 0
+        reduction: this.santaCruzData.currentCO2 * ((impact?.co2Reduction?.value) || 0),
+        newLevel: this.santaCruzData.currentCO2 * (1 - ((impact?.co2Reduction?.value) || 0)),
+        percentage: Math.round((impact?.co2Reduction?.improvement) || 0)
       },
       airQuality: {
         current: this.santaCruzData.airQualityIndex,
-        improvement: this.santaCruzData.airQualityIndex * impact.airQuality.value,
-        newLevel: Math.max(0, this.santaCruzData.airQualityIndex - this.santaCruzData.airQualityIndex * impact.airQuality.value),
-        category: this.getAirQualityCategory(this.santaCruzData.airQualityIndex * (1 - impact.airQuality.value))
+        improvement: this.santaCruzData.airQualityIndex * ((impact?.airQuality?.value) || 0),
+        newLevel: Math.max(0, this.santaCruzData.airQualityIndex - this.santaCruzData.airQualityIndex * ((impact?.airQuality?.value) || 0)),
+        category: this.getAirQualityCategory(this.santaCruzData.airQualityIndex * (1 - ((impact?.airQuality?.value) || 0)))
       },
       temperature: {
         current: this.santaCruzData.averageTemperature,
-        reduction: Math.abs(this.santaCruzData.averageTemperature * impact.temperature.value),
-        newLevel: this.santaCruzData.averageTemperature + (this.santaCruzData.averageTemperature * impact.temperature.value)
+        reduction: Math.abs(this.santaCruzData.averageTemperature * ((impact?.temperature?.value) || 0)),
+        newLevel: this.santaCruzData.averageTemperature + (this.santaCruzData.averageTemperature * ((impact?.temperature?.value) || 0))
       },
       greenCoverage: {
         current: this.santaCruzData.greenCoverage * 100,
-        increase: this.santaCruzData.greenCoverage * impact.biodiversity.value * 100,
-        newLevel: (this.santaCruzData.greenCoverage + this.santaCruzData.greenCoverage * impact.biodiversity.value) * 100
+        increase: this.santaCruzData.greenCoverage * ((impact?.biodiversity?.value) || 0) * 100,
+        newLevel: (this.santaCruzData.greenCoverage + this.santaCruzData.greenCoverage * ((impact?.biodiversity?.value) || 0)) * 100
       },
       economicImpact: {
         current: this.santaCruzData.economicActivity,
-        growth: this.santaCruzData.economicActivity * (impact.economicGrowth?.value || impact.economicActivity?.value || 0),
-        newLevel: this.santaCruzData.economicActivity * (1 + (impact.economicGrowth?.value || impact.economicActivity?.value || 0))
+        growth: this.santaCruzData.economicActivity * ((impact?.economicGrowth?.value) || (impact?.economicActivity?.value) || 0),
+        newLevel: this.santaCruzData.economicActivity * (1 + ((impact?.economicGrowth?.value) || (impact?.economicActivity?.value) || 0))
       }
     };
   }

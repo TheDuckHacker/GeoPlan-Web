@@ -105,6 +105,9 @@ class FireDataService {
 
   // Procesar datos de incendios
   processFireData(fires) {
+    // Defensive: ensure we have an array
+    if (!Array.isArray(fires)) fires = [];
+
     const byYear = {};
     const byMonth = {};
     const hotspots = [];
@@ -112,7 +115,9 @@ class FireDataService {
 
     fires.forEach(fire => {
       const year = fire.year;
-      const month = new Date(fire.acq_date).getMonth();
+      const dateString = fire.acq_date || fire.date || fire.acqDate || null;
+      const parsedMonth = dateString ? new Date(dateString).getMonth() : NaN;
+      const month = Number.isFinite(parsedMonth) ? parsedMonth : null;
       
       // Agrupar por año
       if (!byYear[year]) byYear[year] = [];
@@ -138,7 +143,8 @@ class FireDataService {
           lat,
           lon,
           count: 1,
-          intensity: parseFloat(fire.brightitude) || 300,
+          // defensive: use `brightness` and fallback when missing
+          intensity: parseFloat(fire.brightness) || 300,
           confidence: fire.confidence,
           year: year
         });
@@ -156,17 +162,27 @@ class FireDataService {
       }
     });
 
+    // Safe statistics calculations (avoid reduce on empty arrays / division by zero)
+    const yearKeys = Object.keys(byYear);
+    const monthKeys = Object.keys(byMonth);
+
+    const statistics = {
+      totalFires: fires.length,
+      averagePerYear: yearKeys.length > 0 ? fires.length / yearKeys.length : 0,
+      peakMonth: null,
+      highRiskZones: riskZones.filter(z => z.riskLevel === 'ALTO').length
+    };
+
+    if (monthKeys.length > 0) {
+      statistics.peakMonth = monthKeys.reduce((a, b) => (byMonth[a].length > byMonth[b].length ? a : b));
+    }
+
     return {
       byYear,
       byMonth,
       hotspots: hotspots.sort((a, b) => b.count - a.count),
       riskZones: riskZones.sort((a, b) => b.count - a.count),
-      statistics: {
-        totalFires: fires.length,
-        averagePerYear: fires.length / Object.keys(byYear).length,
-        peakMonth: Object.keys(byMonth).reduce((a, b) => byMonth[a].length > byMonth[b].length ? a : b),
-        highRiskZones: riskZones.filter(z => z.riskLevel === 'ALTO').length
-      }
+      statistics
     };
   }
 

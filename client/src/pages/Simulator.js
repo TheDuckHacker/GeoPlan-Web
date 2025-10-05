@@ -43,6 +43,7 @@ const Simulator = () => {
   const [selectedStrategy, setSelectedStrategy] = useState(null);
   const [intensity, setIntensity] = useState(50);
   const [simulationResults, setSimulationResults] = useState(null);
+  const [runId, setRunId] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [isSimulating, setIsSimulating] = useState(false);
@@ -167,6 +168,8 @@ const Simulator = () => {
       
       console.log('Respuesta de simulación:', response.data);
       setSimulationResults(response.data.data);
+      // Incrementar runId para forzar keys únicas en el mapa y otras vistas derivadas
+      setRunId(id => id + 1);
     } catch (err) {
       console.error('Error running simulation:', err);
       console.error('Error details:', {
@@ -448,7 +451,7 @@ const Simulator = () => {
                       const impactRadius = (intensity / 100) * 2000; // Radio basado en intensidad
                       return (
                         <Circle
-                          key={`impact-${zone.id}`}
+                          key={`impact-${zone.id}-${runId}`}
                           center={zone.coords}
                           radius={impactRadius}
                           color={getImpactColor(intensity)}

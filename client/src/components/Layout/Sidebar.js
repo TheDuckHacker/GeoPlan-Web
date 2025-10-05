@@ -31,7 +31,7 @@ const Sidebar = ({ onClose }) => {
   };
 
   return (
-    <aside className="w-64 h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+    <aside role="navigation" aria-label="Sidebar" className="w-64 h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
       <div className="p-4">
         {/* Botón de cerrar */}
         <div className="flex justify-end mb-4">
@@ -46,7 +46,7 @@ const Sidebar = ({ onClose }) => {
         <div className="flex items-center space-x-3 mb-6 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
           <img
             src={user?.avatar || `https://ui-avatars.com/api/?name=${user?.name}&background=11a4d4&color=fff`}
-            alt={user?.name}
+            alt={user?.name || 'Avatar de usuario'}
             className="w-10 h-10 rounded-full"
           />
           <div>
@@ -60,18 +60,19 @@ const Sidebar = ({ onClose }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="space-y-1">
+        <nav className="space-y-1" role="menu" aria-label="Main navigation">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             return (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 ${
                   isActive(item.href)
-                    ? 'bg-primary text-white'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    ? 'bg-primary text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }`}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                role="menuitem"
               >
                 <Icon className="w-5 h-5" />
                 <span>{item.name}</span>
