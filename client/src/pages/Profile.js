@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { 
   User, 
@@ -37,15 +37,7 @@ const Profile = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      fetchUserProfile();
-    } else {
-      setLoading(false);
-    }
-  }, [isAuthenticated, user]);
-
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     setLoading(true);
     try {
       // Obtener perfil del usuario
@@ -69,7 +61,17 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      fetchUserProfile();
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated, user, fetchUserProfile]);
+
+  
 
   const handleEdit = () => {
     setEditing(true);

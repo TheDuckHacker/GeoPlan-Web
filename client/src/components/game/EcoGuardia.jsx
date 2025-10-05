@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Card from './Card';
 import MessageModal from './MessageModal';
 import { cards as cardData } from '../../data/game/cards';
@@ -47,7 +47,7 @@ const EcoGuardia = () => {
     };
   }, []);
 
-  const setupLevel = () => {
+  const setupLevel = useCallback(() => {
     const { pairs, time } = levelConfig[level];
     const selectedCards = cardData.slice(0, pairs);
     const gameCards = [...selectedCards, ...selectedCards]
@@ -90,7 +90,7 @@ const EcoGuardia = () => {
         return s - 1;
       });
     }, 1000);
-  };
+  }, [level]);
 
   const handleCardClick = (card) => {
     if (checking || flippedCards.length === 2 || matchedCards.includes(card.uniqueId) || flippedCards.includes(card.uniqueId)) {

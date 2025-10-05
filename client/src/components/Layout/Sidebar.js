@@ -4,7 +4,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { 
   LayoutDashboard, 
   Map, 
-  BarChart3, 
   AlertTriangle, 
   Users, 
   Info,

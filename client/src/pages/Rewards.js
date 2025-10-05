@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Award, Trophy, Gift, Star, CheckCircle, Clock, Zap, Crown, Target, Users, Medal, FileText } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -13,16 +13,7 @@ const Rewards = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (user) {
-      fetchGamificationData();
-    } else {
-      setLoading(false);
-      setError('Debes iniciar sesión para ver tus recompensas.');
-    }
-  }, [user]);
-
-  const fetchGamificationData = async () => {
+  const fetchGamificationData = useCallback(async () => {
     setLoading(true);
     setError('');
     setMessage('');
@@ -56,7 +47,18 @@ const Rewards = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchGamificationData();
+    } else {
+      setLoading(false);
+      setError('Debes iniciar sesión para ver tus recompensas.');
+    }
+  }, [user, fetchGamificationData]);
+
+  
 
   const handleClaimDailyReward = async () => {
     setLoading(true);
