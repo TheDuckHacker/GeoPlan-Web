@@ -1,4 +1,6 @@
 const supabase = require('../config/supabase');
+const config = require('../config');
+const { createClient } = require('@supabase/supabase-js');
 
 class DatabaseService {
   constructor() {
@@ -8,14 +10,13 @@ class DatabaseService {
   // Usuarios
   async createUser(userData) {
     try {
-      // Usar el cliente de Supabase con permisos de service role para bypass RLS
-      const { createClient } = require('@supabase/supabase-js');
-      const serviceRoleClient = createClient(
-        'https://fxqzuwdacqzgwnupyczb.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4cXp1d2RhY3F6Z3dudXB5Y3piIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTYwOTg1MCwiZXhwIjoyMDc1MTg1ODUwfQ.placeholder' // Necesitarás la service role key
-      );
+      // If a service role key is available, use a service-role client for privileged writes
+      let client = this.supabase;
+      if (config.SUPABASE_SERVICE_ROLE_KEY && config.SUPABASE_SERVICE_ROLE_KEY !== 'tu_supabase_service_role_key_aqui') {
+        client = createClient(config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY);
+      }
 
-      const { data, error } = await serviceRoleClient
+      const { data, error } = await client
         .from('users')
         .insert([userData])
         .select()

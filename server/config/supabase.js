@@ -1,10 +1,15 @@
 const { createClient } = require('@supabase/supabase-js');
+const config = require('../config');
 
-// Configuración de Supabase
-const supabaseUrl = 'https://fxqzuwdacqzgwnupyczb.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4cXp1d2RhY3F6Z3dudXB5Y3piIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2MDk4NTAsImV4cCI6MjA3NTE4NTg1MH0.BjcuP9qXr6YVxj2szuWRleCT-rtAQpIUjFZ_2-RfQio';
+// Leer desde variables de entorno si están disponibles, sino usar config por defecto
+const supabaseUrl = process.env.SUPABASE_URL || config.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY || config.SUPABASE_ANON_KEY;
 
-// Crear cliente de Supabase
+if (!supabaseUrl || !supabaseKey) {
+	console.warn('Supabase URL o ANON KEY no configurados. Revisa tus variables de entorno.');
+}
+
+// Crear cliente de Supabase (anon/public key)
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 module.exports = supabase;
