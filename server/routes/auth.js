@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const databaseService = require('../services/databaseService');
 const jwt = require('jsonwebtoken');
-const config = require('../config');
 const bcrypt = require('bcryptjs');
+
+// Leer el secreto JWT desde las variables de entorno
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Registro de usuario
 router.post('/register', async (req, res) => {
@@ -60,7 +62,7 @@ router.post('/register', async (req, res) => {
     // Generar JWT token
     const token = jwt.sign(
       { userId: result.data.id, email: result.data.email },
-      config.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: '7d' }
     );
 
@@ -122,7 +124,7 @@ router.post('/login', async (req, res) => {
     // Generar JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      config.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: '7d' }
     );
 
@@ -161,7 +163,7 @@ router.get('/verify', async (req, res) => {
     }
 
     // Verificar token
-    const decoded = jwt.verify(token, config.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     
     // Obtener usuario
     const result = await databaseService.getUserById(decoded.userId);
@@ -214,7 +216,7 @@ router.put('/profile', async (req, res) => {
     }
 
     // Verificar token
-    const decoded = jwt.verify(token, config.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     const { name, avatar_url } = req.body;
 
     // Actualizar usuario
@@ -265,7 +267,7 @@ router.put('/change-password', async (req, res) => {
     }
 
     // Verificar token
-    const decoded = jwt.verify(token, config.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword || !newPassword) {
