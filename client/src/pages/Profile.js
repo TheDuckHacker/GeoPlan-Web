@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { 
   User, 
@@ -17,12 +18,15 @@ import {
   Medal,
   FileText,
   Users,
-  BarChart3
+  BarChart3,
+  Gift,
+  Crown
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const Profile = () => {
   const { user, isAuthenticated, updateUser } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
@@ -36,6 +40,9 @@ const Profile = () => {
   });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  
+  // Obtener pestaña activa desde URL
+  const activeTab = searchParams.get('tab') || 'profile';
 
   const fetchUserProfile = useCallback(async () => {
     setLoading(true);
@@ -122,6 +129,209 @@ const Profile = () => {
     }));
   };
 
+  const handleTabChange = (tab) => {
+    setSearchParams({ tab });
+  };
+
+  // Componente de Recompensas
+  const RewardsTab = () => (
+    <div className="space-y-6">
+      {/* Sistema de Gamificación NASA */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center">
+          <Crown className="h-7 w-7 text-yellow-500 mr-3" />
+          Sistema de Gamificación NASA
+        </h2>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          ¡Conquista los niveles y obtén certificados oficiales de la NASA!
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Nivel Actual */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+              <Trophy className="h-5 w-5 text-blue-500 mr-2" />
+              Tu Nivel Actual
+            </h3>
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
+                <span className="text-2xl">🚀</span>
+              </div>
+              <h4 className="font-bold text-lg text-gray-800 dark:text-white">Nivel 1</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Explorador Espacial</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                Comienza tu viaje hacia la sostenibilidad urbana
+              </p>
+            </div>
+          </div>
+
+          {/* Puntos Totales */}
+          <div className="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+              <Star className="h-5 w-5 text-green-500 mr-2" />
+              Puntos Totales
+            </h3>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
+                {totalPoints}
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
+                <div 
+                  className="bg-green-500 h-2 rounded-full transition-all duration-300" 
+                  style={{ width: `${Math.min((totalPoints / 100) * 100, 100)}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Progreso al siguiente nivel
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {Math.max(100 - totalPoints, 0)} puntos restantes para Analista Climático
+              </p>
+            </div>
+          </div>
+
+          {/* Recompensa Diaria */}
+          <div className="bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+              <Gift className="h-5 w-5 text-purple-500 mr-2" />
+              Recompensa Diaria
+            </h3>
+            <div className="text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                ¡Reclama tus puntos diarios por mantenerte activo!
+              </p>
+              <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 px-4 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2">
+                <Gift className="h-5 w-5" />
+                <span>Reclamar Recompensa Diaria</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Certificados y Logros */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Certificados NASA */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+            <FileText className="h-6 w-6 text-blue-500 mr-2" />
+            Certificados NASA
+          </h3>
+          <div className="space-y-3">
+            {certificates.filter(c => c.obtained).map((cert, index) => (
+              <div
+                key={cert.id}
+                className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700"
+              >
+                <div className="flex items-center">
+                  <span className="text-2xl mr-3">{cert.icon}</span>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-blue-800 dark:text-blue-300">
+                      {cert.name}
+                    </h4>
+                    <p className="text-sm text-blue-600 dark:text-blue-400">
+                      Nivel {cert.level} • {cert.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            {certificates.filter(c => c.obtained).length === 0 && (
+              <div className="text-center py-8">
+                <FileText className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-500 dark:text-gray-400">
+                  Aún no tienes certificados
+                </p>
+                <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                  ¡Completa simulaciones para obtenerlos!
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Logros Obtenidos */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+            <Medal className="h-6 w-6 text-purple-500 mr-2" />
+            Logros Obtenidos
+          </h3>
+          <div className="space-y-3">
+            {achievements.filter(a => a.obtained).map((achievement, index) => (
+              <div
+                key={achievement.id}
+                className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-700"
+              >
+                <div className="flex items-center">
+                  <span className="text-2xl mr-3">{achievement.icon}</span>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-purple-800 dark:text-purple-300">
+                      {achievement.name}
+                    </h4>
+                    <p className="text-sm text-purple-600 dark:text-purple-400">
+                      {achievement.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            {achievements.filter(a => a.obtained).length === 0 && (
+              <div className="text-center py-8">
+                <Medal className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-500 dark:text-gray-400">
+                  Aún no tienes logros
+                </p>
+                <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                  ¡Participa en actividades para desbloquearlos!
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Ranking Global */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center">
+          <Users className="h-6 w-6 text-orange-500 mr-2" />
+          Ranking Global
+        </h3>
+        <div className="space-y-3">
+          {[
+            { name: 'Ana García', level: 5, points: 1250, position: 1 },
+            { name: 'Carlos Mendoza', level: 4, points: 980, position: 2 },
+            { name: 'Sofía Ramírez', level: 3, points: 750, position: 3 },
+            { name: 'Miguel Torres', level: 3, points: 520, position: 4 },
+            { name: 'Laura Jiménez', level: 2, points: 480, position: 5 }
+          ].map((player, index) => (
+            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+                  player.position === 1 ? 'bg-yellow-500' :
+                  player.position === 2 ? 'bg-gray-400' :
+                  player.position === 3 ? 'bg-orange-600' :
+                  'bg-gray-600'
+                }`}>
+                  #{player.position}
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800 dark:text-white">{player.name}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Nivel {player.level}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="font-semibold text-gray-800 dark:text-white">{player.points.toLocaleString()}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">puntos</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   if (!isAuthenticated) {
     return (
       <div className="p-8 bg-background-light dark:bg-background-dark min-h-screen font-display text-foreground-light dark:text-foreground-dark">
@@ -163,7 +373,58 @@ const Profile = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Pestañas de navegación */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-8">
+        <div className="border-b border-gray-200 dark:border-gray-700">
+          <nav className="flex space-x-8 px-6" aria-label="Tabs">
+            <button
+              onClick={() => handleTabChange('profile')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'profile'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <User className="h-4 w-4" />
+                <span>Mi Perfil</span>
+              </div>
+            </button>
+            <button
+              onClick={() => handleTabChange('rewards')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'rewards'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <Trophy className="h-4 w-4" />
+                <span>Recompensas</span>
+              </div>
+            </button>
+            <button
+              onClick={() => handleTabChange('settings')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'settings'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <Settings className="h-4 w-4" />
+                <span>Configuración</span>
+              </div>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      {/* Contenido de las pestañas */}
+      {activeTab === 'rewards' && <RewardsTab />}
+      
+      {activeTab === 'profile' && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Panel Principal - Información del Usuario */}
         <div className="lg:col-span-2">
           {/* Información Personal */}
@@ -464,6 +725,61 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      )}
+
+      {activeTab === 'settings' && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center">
+            <Settings className="h-7 w-7 text-gray-500 mr-3" />
+            Configuración de la Cuenta
+          </h2>
+          <div className="space-y-6">
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4">
+              <div className="flex items-center">
+                <Settings className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+                <div>
+                  <h3 className="font-medium text-yellow-800 dark:text-yellow-200">
+                    Configuración en desarrollo
+                  </h3>
+                  <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+                    Próximamente podrás configurar tus preferencias de notificaciones, privacidad y más.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-800 dark:text-white mb-2">Notificaciones</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  Configura cómo recibir alertas y actualizaciones
+                </p>
+              </div>
+              
+              <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-800 dark:text-white mb-2">Privacidad</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  Controla la visibilidad de tu perfil y datos
+                </p>
+              </div>
+              
+              <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-800 dark:text-white mb-2">Tema</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  Personaliza la apariencia de la aplicación
+                </p>
+              </div>
+              
+              <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <h4 className="font-medium text-gray-800 dark:text-white mb-2">Idioma</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  Selecciona tu idioma preferido
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

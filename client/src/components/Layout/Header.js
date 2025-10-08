@@ -63,7 +63,6 @@ const Header = () => {
     { name: 'Alertas', href: '/alerts', icon: AlertTriangle },
     { name: 'Mapas', href: '/maps', icon: Map },
     { name: 'Comunidad', href: '/community', icon: Users },
-    { name: 'Recompensas', href: '/rewards', icon: Trophy },
     { name: 'Minijuego', href: '/minigame', icon: Gamepad2, requireAuth: true },
     { name: 'Acerca de', href: '/about', icon: Info },
   ];
@@ -178,7 +177,7 @@ const Header = () => {
                       <span>Mi Perfil</span>
                     </Link>
                     <Link
-                      to="/rewards"
+                      to="/profile?tab=rewards"
                       className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -186,7 +185,7 @@ const Header = () => {
                       <span>Recompensas</span>
                     </Link>
                     <Link
-                      to="/settings"
+                      to="/profile?tab=settings"
                       className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
@@ -289,7 +288,7 @@ const Header = () => {
                     <span className="text-xs">Perfil</span>
                   </Link>
                   <Link
-                    to="/rewards"
+                    to="/profile?tab=rewards"
                     className="flex flex-col items-center space-y-1 p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >

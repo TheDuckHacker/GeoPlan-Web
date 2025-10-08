@@ -1,5 +1,6 @@
-v2.1.0 - Minigame protection fixed
-- Fixed authentication check for minigame
-- Added debug logs
-- Improved mobile navbar
-- Force deploy
+v2.2.0 - Navigation simplified and rewards moved to profile
+- Removed duplicate sidebar navigation
+- Moved rewards to profile tabs
+- Simplified navigation structure
+- Added profile tabs system
+- Improved UX and reduced confusion
