@@ -1,26 +1,41 @@
-const { createClient } = require('@supabase/supabase-js');
-const config = require('../config');
+const { createSupabaseClient, createSupabaseAdmin, testSupabaseConnection } = require('../lib/supabaseClient');
 
 // --- Cliente Público (para el frontend o tareas no privilegiadas) ---
-const supabaseUrl = config.SUPABASE_URL;
-const supabaseAnonKey = config.SUPABASE_ANON_KEY;
+let supabase;
+let supabaseAdmin;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn('Supabase URL o ANON KEY públicos no configurados en config.js');
+try {
+  supabase = createSupabaseClient();
+  supabaseAdmin = createSupabaseAdmin();
+  console.log('✅ Clientes de Supabase inicializados correctamente');
+} catch (error) {
+  console.error('❌ Error al inicializar clientes de Supabase:', error.message);
+  // Crear clientes dummy para evitar crashes
+  supabase = null;
+  supabaseAdmin = null;
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Función para obtener el cliente público
+const getSupabaseClient = () => {
+  if (!supabase) {
+    throw new Error('Cliente de Supabase no inicializado. Verifica las variables de entorno.');
+  }
+  return supabase;
+};
 
+// Función para obtener el cliente admin
+const getSupabaseAdmin = () => {
+  if (!supabaseAdmin) {
+    throw new Error('Cliente admin de Supabase no inicializado. Verifica las variables de entorno.');
+  }
+  return supabaseAdmin;
+};
 
-// --- Cliente de Servicio (para el backend con privilegios de administrador) ---
-const supabaseServiceRoleKey = config.SUPABASE_SERVICE_ROLE_KEY;
-
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, {
-    auth: {
-        autoRefreshToken: false,
-        persistSession: false
-    }
-});
-
-// Exportamos ambos clientes
-module.exports = { supabase, supabaseAdmin };
+// Exportamos los clientes y funciones
+module.exports = { 
+  supabase, 
+  supabaseAdmin,
+  getSupabaseClient,
+  getSupabaseAdmin,
+  testSupabaseConnection
+};

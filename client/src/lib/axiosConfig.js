@@ -1,18 +1,9 @@
 import axios from 'axios';
+import config from '../config/environment';
 
 // Configuración base de axios para manejar diferentes entornos
 const getBaseURL = () => {
-  // En desarrollo, usar proxy configurado en package.json
-  if (process.env.NODE_ENV === 'development') {
-    return '';
-  }
-  
-  // En producción, usar la URL completa de Vercel
-  if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || '';
-  }
-  
-  return '';
+  return config.API_BASE_URL;
 };
 
 // Crear instancia de axios con configuración base
