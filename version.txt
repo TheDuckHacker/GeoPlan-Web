@@ -1,0 +1,5 @@
+v2.1.0 - Minigame protection fixed
+- Fixed authentication check for minigame
+- Added debug logs
+- Improved mobile navbar
+- Force deploy

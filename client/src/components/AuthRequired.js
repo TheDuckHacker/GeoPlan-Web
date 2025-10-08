@@ -4,9 +4,13 @@ import { useAuth } from '../contexts/AuthContext';
 import { Gamepad2, User, Lock, ArrowRight } from 'lucide-react';
 
 const AuthRequired = ({ feature = "esta función" }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
-  if (isAuthenticated) {
+  // Debug: Log para verificar el estado
+  console.log('AuthRequired - isAuthenticated:', isAuthenticated);
+  console.log('AuthRequired - user:', user);
+
+  if (isAuthenticated && user) {
     return null; // Si está autenticado, no mostrar nada
   }
 
