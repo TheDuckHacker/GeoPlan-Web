@@ -1,6 +1,6 @@
-v2.3.0 - Fixed dashboard minigame authentication
-- Protected minigame banner in dashboard for authenticated users only
-- Added community invitation banner for non-authenticated users
-- Protected user progress and rewards sections
-- Fixed rewards link to go to profile tab
-- Complete authentication protection across all features
+v2.4.0 - Fixed Vercel 404 deployment error
+- Updated vercel.json configuration for proper monorepo deployment
+- Added .vercelignore for cleaner builds
+- Fixed routing configuration
+- Improved build process for client and server
+- Force redeploy to fix NOT_FOUND errors
