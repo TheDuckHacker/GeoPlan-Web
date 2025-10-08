@@ -5,8 +5,6 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const HOST = process.env.HOST || '0.0.0.0';
 
 // Middleware de seguridad
 app.use(helmet());
@@ -63,7 +61,5 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Ruta no encontrada' });
 });
 
-app.listen(PORT, HOST, () => {
-  console.log(`🚀 Servidor GeoPlan ejecutándose en http://${HOST}:${PORT}`);
-  console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
-});
+// Exportar la app para Vercel
+module.exports = app;
