@@ -1,25 +1,23 @@
 {
   "name": "geoplan-web-monorepo",
   "version": "1.0.0",
+  "private": true,
   "description": "Monorepo for GeoPlan Web application, containing both the client and server.",
-  "main": "server/index.js",
   "scripts": {
+    "build": "npm run build --prefix client",
     "start": "npm start --prefix server",
-    "dev": "concurrently \"npm run dev --prefix client\" \"npm start\"",
-    "postinstall": "npm install --prefix server"
+    "dev": "concurrently \"npm run dev --prefix client\" \"npm run start\""
   },
-  "keywords": [
-    "react",
-    "express",
-    "monorepo",
-    "gis"
+  "workspaces": [
+    "client",
+    "server"
   ],
-  "author": "Your Name",
+  "author": "GeoPlan Team",
   "license": "ISC",
   "dependencies": {
     "concurrently": "^8.2.2"
   },
   "engines": {
-    "node": "22.x"
+    "node": "18.x"
   }
 }
