@@ -1,20 +1,25 @@
 {
-  "name": "geoplan-ciudad-viva",
+  "name": "geoplan-web-monorepo",
   "version": "1.0.0",
-  "description": "GeoPlan Ciudad Viva - Plataforma educativa y participativa para Santa Cruz, Bolivia",
+  "description": "Monorepo for GeoPlan Web application, containing both the client and server.",
   "main": "server/index.js",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm start",
-    "build": "cd client && npm run build",
-    "start": "cd server && npm start",
-    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+    "start": "npm start --prefix server",
+    "dev": "concurrently \"npm run dev --prefix client\" \"npm start\"",
+    "postinstall": "npm install --prefix server"
   },
-  "keywords": ["santa-cruz", "bolivia", "urban-planning", "sustainability", "nasa-data"],
-  "author": "GeoPlan Ciudad Viva Team",
-  "license": "MIT",
-  "devDependencies": {
+  "keywords": [
+    "react",
+    "express",
+    "monorepo",
+    "gis"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
     "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
