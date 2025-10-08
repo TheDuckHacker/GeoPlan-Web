@@ -1,22 +1,12 @@
-const supabase = require('../config/supabase');
-const config = require('../config');
-const { createClient } = require('@supabase/supabase-js');
+const { supabase, supabaseAdmin } = require('../config/supabase');
 
+// Este servicio ahora usará el cliente ADMIN para todas las operaciones.
 class DatabaseService {
-  constructor() {
-    this.supabase = supabase;
-  }
 
   // Usuarios
   async createUser(userData) {
     try {
-      // If a service role key is available, use a service-role client for privileged writes
-      let client = this.supabase;
-      if (config.SUPABASE_SERVICE_ROLE_KEY && config.SUPABASE_SERVICE_ROLE_KEY !== 'tu_supabase_service_role_key_aqui') {
-        client = createClient(config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY);
-      }
-
-      const { data, error } = await client
+      const { data, error } = await supabaseAdmin
         .from('users')
         .insert([userData])
         .select()
@@ -32,7 +22,7 @@ class DatabaseService {
 
   async getUserById(id) {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await supabaseAdmin
         .from('users')
         .select('*')
         .eq('id', id)
@@ -48,13 +38,16 @@ class DatabaseService {
 
   async getUserByEmail(email) {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await supabaseAdmin
         .from('users')
         .select('*')
         .eq('email', email)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        // This is not a critical error if the user is not found during login check
+        return { success: false, error: 'User not found' };
+      }
       return { success: true, data };
     } catch (error) {
       console.error('Error getting user by email:', error);
@@ -64,7 +57,7 @@ class DatabaseService {
 
   async updateUser(id, userData) {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await supabaseAdmin
         .from('users')
         .update(userData)
         .eq('id', id)
@@ -79,15 +72,11 @@ class DatabaseService {
     }
   }
 
-  // Simulaciones
+  // El resto de las funciones también usarán supabaseAdmin para consistencia
+
   async createSimulation(simulationData) {
     try {
-      const { data, error } = await this.supabase
-        .from('simulations')
-        .insert([simulationData])
-        .select()
-        .single();
-
+      const { data, error } = await supabaseAdmin.from('simulations').insert([simulationData]).select().single();
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -98,13 +87,7 @@ class DatabaseService {
 
   async getSimulationsByUser(userId, limit = 10) {
     try {
-      const { data, error } = await this.supabase
-        .from('simulations')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(limit);
-
+      const { data, error } = await supabaseAdmin.from('simulations').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(limit);
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -113,15 +96,9 @@ class DatabaseService {
     }
   }
 
-  // Alertas climáticas
   async createClimateAlert(alertData) {
     try {
-      const { data, error } = await this.supabase
-        .from('climate_alerts')
-        .insert([alertData])
-        .select()
-        .single();
-
+      const { data, error } = await supabaseAdmin.from('climate_alerts').insert([alertData]).select().single();
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -132,12 +109,7 @@ class DatabaseService {
 
   async getActiveAlerts() {
     try {
-      const { data, error } = await this.supabase
-        .from('climate_alerts')
-        .select('*')
-        .eq('active', true)
-        .order('created_at', { ascending: false });
-
+      const { data, error } = await supabaseAdmin.from('climate_alerts').select('*').eq('active', true).order('created_at', { ascending: false });
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -146,15 +118,9 @@ class DatabaseService {
     }
   }
 
-  // Proyectos comunitarios
   async createCommunityProject(projectData) {
     try {
-      const { data, error } = await this.supabase
-        .from('community_projects')
-        .insert([projectData])
-        .select()
-        .single();
-
+      const { data, error } = await supabaseAdmin.from('community_projects').insert([projectData]).select().single();
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -165,12 +131,7 @@ class DatabaseService {
 
   async getCommunityProjects(limit = 10) {
     try {
-      const { data, error } = await this.supabase
-        .from('community_projects')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(limit);
-
+      const { data, error } = await supabaseAdmin.from('community_projects').select('*').order('created_at', { ascending: false }).limit(limit);
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -181,13 +142,7 @@ class DatabaseService {
 
   async voteForProject(projectId) {
     try {
-      const { data, error } = await this.supabase
-        .from('community_projects')
-        .update({ votes: this.supabase.raw('votes + 1') })
-        .eq('id', projectId)
-        .select()
-        .single();
-
+      const { data, error } = await supabaseAdmin.rpc('increment_project_votes', { project_id: projectId });
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -196,15 +151,9 @@ class DatabaseService {
     }
   }
 
-  // Ideas comunitarias
   async createCommunityIdea(ideaData) {
     try {
-      const { data, error } = await this.supabase
-        .from('community_ideas')
-        .insert([ideaData])
-        .select()
-        .single();
-
+      const { data, error } = await supabaseAdmin.from('community_ideas').insert([ideaData]).select().single();
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -215,12 +164,7 @@ class DatabaseService {
 
   async getCommunityIdeas(limit = 10) {
     try {
-      const { data, error } = await this.supabase
-        .from('community_ideas')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(limit);
-
+      const { data, error } = await supabaseAdmin.from('community_ideas').select('*').order('created_at', { ascending: false }).limit(limit);
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -229,15 +173,9 @@ class DatabaseService {
     }
   }
 
-  // Posts del foro
   async createForumPost(postData) {
     try {
-      const { data, error } = await this.supabase
-        .from('forum_posts')
-        .insert([postData])
-        .select()
-        .single();
-
+      const { data, error } = await supabaseAdmin.from('forum_posts').insert([postData]).select().single();
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -248,18 +186,7 @@ class DatabaseService {
 
   async getForumPosts(limit = 10) {
     try {
-      const { data, error } = await this.supabase
-        .from('forum_posts')
-        .select(`
-          *,
-          users:user_id (
-            name,
-            avatar_url
-          )
-        `)
-        .order('created_at', { ascending: false })
-        .limit(limit);
-
+      const { data, error } = await supabaseAdmin.from('forum_posts').select('*, users:user_id(name, avatar_url)').order('created_at', { ascending: false }).limit(limit);
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -268,22 +195,10 @@ class DatabaseService {
     }
   }
 
-  // Datos satelitales (cache)
   async cacheSatelliteData(dataType, coordinates, data, date) {
     try {
-      const satelliteData = {
-        data_type: dataType,
-        coordinates: `POINT(${coordinates.lon} ${coordinates.lat})`,
-        data: data,
-        date: date
-      };
-
-      const { data: result, error } = await this.supabase
-        .from('satellite_data')
-        .insert([satelliteData])
-        .select()
-        .single();
-
+      const satelliteData = { data_type: dataType, coordinates: `POINT(${coordinates.lon} ${coordinates.lat})`, data, date };
+      const { data: result, error } = await supabaseAdmin.from('satellite_data').insert([satelliteData]).select().single();
       if (error) throw error;
       return { success: true, data: result };
     } catch (error) {
@@ -294,13 +209,7 @@ class DatabaseService {
 
   async getCachedSatelliteData(dataType, coordinates, date) {
     try {
-      const { data, error } = await this.supabase
-        .from('satellite_data')
-        .select('*')
-        .eq('data_type', dataType)
-        .eq('date', date)
-        .single();
-
+      const { data, error } = await supabaseAdmin.from('satellite_data').select('*').eq('data_type', dataType).eq('date', date).single();
       if (error) throw error;
       return { success: true, data };
     } catch (error) {
@@ -309,14 +218,13 @@ class DatabaseService {
     }
   }
 
-  // Estadísticas generales
   async getStats() {
     try {
       const [usersResult, simulationsResult, projectsResult, ideasResult] = await Promise.all([
-        this.supabase.from('users').select('id', { count: 'exact' }),
-        this.supabase.from('simulations').select('id', { count: 'exact' }),
-        this.supabase.from('community_projects').select('id', { count: 'exact' }),
-        this.supabase.from('community_ideas').select('id', { count: 'exact' })
+        supabaseAdmin.from('users').select('id', { count: 'exact' }),
+        supabaseAdmin.from('simulations').select('id', { count: 'exact' }),
+        supabaseAdmin.from('community_projects').select('id', { count: 'exact' }),
+        supabaseAdmin.from('community_ideas').select('id', { count: 'exact' })
       ]);
 
       return {
