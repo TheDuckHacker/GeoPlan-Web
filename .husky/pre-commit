@@ -1,0 +1,22 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running pre-commit hook..."
+
+# Verify vercel.json exists and is not empty
+if [ ! -s "vercel.json" ]; then
+  echo "Error: vercel.json is missing or empty." >&2
+  exit 1
+fi
+
+# Optional: Add more checks here, e.g., JSON validation
+# if ! command -v jq >/dev/null; then
+#   echo "Warning: jq is not installed. Skipping JSON validation." >&2
+# else
+#   if ! jq . "vercel.json" >/dev/null; then
+#     echo "Error: vercel.json contains invalid JSON." >&2
+#     exit 1
+#   fi
+# fi
+
+echo "Pre-commit checks passed."
