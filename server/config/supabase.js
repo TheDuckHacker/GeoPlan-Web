@@ -13,8 +13,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 
 // --- Cliente de Servicio (para el backend con privilegios de administrador) ---
-// ¡¡¡ADVERTENCIA: Clave secreta hardcodeada solo para PRUEBAS!!!
-const supabaseServiceRoleKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4cXp1d2RhY3F6Z3dudXB5Y3piIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTYwOTg1MCwiZXhwIjoyMDc1MTg1ODUwfQ.2i3_1CfgJXZeExWft8onOpJm4fxQu-x9pR4mXQ4jW9c';
+const supabaseServiceRoleKey = config.SUPABASE_SERVICE_ROLE_KEY;
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, {
     auth: {

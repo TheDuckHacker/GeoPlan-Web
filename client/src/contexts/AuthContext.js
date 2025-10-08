@@ -33,8 +33,11 @@ export const AuthProvider = ({ children }) => {
           const response = await axios.get('/api/auth/verify');
           setUser(response.data.data.user);
         } catch (error) {
-          console.error('Token inválido:', error);
-          logout();
+          console.error('Token inválido o error de conexión:', error);
+          // Solo hacer logout si es un error de autenticación, no de red
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            logout();
+          }
         }
       }
       setLoading(false);

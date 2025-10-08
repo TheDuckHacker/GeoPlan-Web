@@ -8,9 +8,35 @@ const app = express();
 
 // Middleware de seguridad
 app.use(helmet());
+
+// Configuración de CORS para producción y desarrollo
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  process.env.CLIENT_URL,
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true
+  origin: function (origin, callback) {
+    // Permitir requests sin origin (como mobile apps o curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // En producción, también permitir el dominio de Vercel
+    if (process.env.NODE_ENV === 'production' && origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+    
+    const msg = 'La política CORS para este origen no permite el acceso desde el origen especificado.';
+    return callback(new Error(msg), false);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-requested-with']
 }));
 
 // Rate limiting: habilitar solo en producción para evitar validaciones sobre proxy en desarrollo
