@@ -1,6 +1,6 @@
-v2.2.0 - Navigation simplified and rewards moved to profile
-- Removed duplicate sidebar navigation
-- Moved rewards to profile tabs
-- Simplified navigation structure
-- Added profile tabs system
-- Improved UX and reduced confusion
+v2.3.0 - Fixed dashboard minigame authentication
+- Protected minigame banner in dashboard for authenticated users only
+- Added community invitation banner for non-authenticated users
+- Protected user progress and rewards sections
+- Fixed rewards link to go to profile tab
+- Complete authentication protection across all features

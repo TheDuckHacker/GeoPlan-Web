@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   Map, 
   AlertTriangle, 
@@ -25,6 +26,7 @@ import {
 } from 'lucide-react';
 
 const Dashboard = () => {
+  const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
   const [alerts, setAlerts] = useState([]);
   const [fireData, setFireData] = useState(null);
@@ -147,40 +149,73 @@ const Dashboard = () => {
       </div>
 
       <div className="max-w-7xl mx-auto p-6 space-y-6">
-        {/* Banner del Minijuego */}
-        <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-xl shadow-lg p-6 text-white animate-fade-in-up hover-lift">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <div className="bg-white/20 rounded-full p-3 mr-4">
-                <Award className="h-8 w-8 text-white" />
+        {/* Banner del Minijuego - Solo para usuarios autenticados */}
+        {isAuthenticated && (
+          <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-xl shadow-lg p-6 text-white animate-fade-in-up hover-lift">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="bg-white/20 rounded-full p-3 mr-4">
+                  <Award className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold mb-1">🎮 Minijuego: EcoGuardian</h2>
+                  <p className="text-purple-100">¡Completa misiones ecológicas y gana puntos para salvar Santa Cruz!</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-2xl font-bold mb-1">🎮 Minijuego: EcoGuardian</h2>
-                <p className="text-purple-100">¡Completa misiones ecológicas y gana puntos para salvar Santa Cruz!</p>
+              <div className="text-right">
+                <div className="text-3xl font-bold mb-1">🏆</div>
+                <p className="text-sm text-purple-100">Nivel {userProgress?.progress?.currentLevel?.level || 1}</p>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-3xl font-bold mb-1">🏆</div>
-              <p className="text-sm text-purple-100">Nivel {userProgress?.progress?.currentLevel?.level || 1}</p>
+            <div className="mt-4 flex items-center justify-between">
+              <div className="flex space-x-4">
+                <div className="bg-white/20 rounded-lg px-4 py-2">
+                  <span className="text-sm">Puntos: {userProgress?.progress?.totalPoints || 0}</span>
+                </div>
+                <div className="bg-white/20 rounded-lg px-4 py-2">
+                  <span className="text-sm">Misiones: 3/5</span>
+                </div>
+              </div>
+              <Link
+                to="/minigame"
+                className="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
+              >
+                Jugar Ahora
+              </Link>
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-between">
-            <div className="flex space-x-4">
-              <div className="bg-white/20 rounded-lg px-4 py-2">
-                <span className="text-sm">Puntos: {userProgress?.progress?.totalPoints || 0}</span>
+        )}
+
+        {/* Mensaje para usuarios no autenticados */}
+        {!isAuthenticated && (
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg p-6 text-white animate-fade-in-up hover-lift">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="bg-white/20 rounded-full p-3 mr-4">
+                  <Users className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold mb-1">¡Únete a la Comunidad!</h2>
+                  <p className="text-blue-100">Regístrate para acceder a simulaciones, minijuegos y recompensas exclusivas.</p>
+                </div>
               </div>
-              <div className="bg-white/20 rounded-lg px-4 py-2">
-                <span className="text-sm">Misiones: 3/5</span>
+              <div className="flex space-x-3">
+                <Link
+                  to="/login"
+                  className="bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition-colors"
+                >
+                  Iniciar Sesión
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+                >
+                  Registrarse
+                </Link>
               </div>
             </div>
-            <Link
-              to="/minigame"
-              className="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
-            >
-              Jugar Ahora
-            </Link>
           </div>
-        </div>
+        )}
 
         {/* Alertas en tiempo real */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -350,8 +385,8 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* Sistema de recompensas */}
-        {userProgress && (
+        {/* Sistema de recompensas - Solo para usuarios autenticados */}
+        {isAuthenticated && userProgress && (
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-fade-in-up hover-lift">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
               <Award className="h-6 w-6 text-yellow-500 mr-2" />
@@ -503,7 +538,7 @@ const Dashboard = () => {
           </Link>
           
           <Link
-            to="/rewards"
+            to={isAuthenticated ? "/profile?tab=rewards" : "/login"}
             className="p-6 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in-up"
             style={{animationDelay: '0.3s'}}
           >
